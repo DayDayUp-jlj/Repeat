@@ -1,0 +1,85 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\unity_file\\BallMove\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{D5E8E3B5-6E4A-66CF-1501-3D3608C4A28B}|Assembly-CSharp.csproj|d:\\unity_file\\ballmove\\assets\\script\\gamecontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D5E8E3B5-6E4A-66CF-1501-3D3608C4A28B}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\gamecontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D5E8E3B5-6E4A-66CF-1501-3D3608C4A28B}|Assembly-CSharp.csproj|D:\\unity_file\\BallMove\\assets\\script\\quitgame.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D5E8E3B5-6E4A-66CF-1501-3D3608C4A28B}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\quitgame.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\unity_file\\BallMove\\Library\\PackageCache\\com.unity.purchasing@4.11.0\\Editor\\UnityPurchasingEditor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Library\\PackageCache\\com.unity.purchasing@4.11.0\\Editor\\UnityPurchasingEditor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D5E8E3B5-6E4A-66CF-1501-3D3608C4A28B}|Assembly-CSharp.csproj|D:\\unity_file\\BallMove\\assets\\script\\startgame.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D5E8E3B5-6E4A-66CF-1501-3D3608C4A28B}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\startgame.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 3,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "QuitGame.cs",
+              "DocumentMoniker": "D:\\unity_file\\BallMove\\Assets\\Script\\QuitGame.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\QuitGame.cs",
+              "ToolTip": "D:\\unity_file\\BallMove\\Assets\\Script\\QuitGame.cs",
+              "RelativeToolTip": "Assets\\Script\\QuitGame.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAwwBIAAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-11T05:28:17.481Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "UnityPurchasingEditor.cs",
+              "DocumentMoniker": "D:\\unity_file\\BallMove\\Library\\PackageCache\\com.unity.purchasing@4.11.0\\Editor\\UnityPurchasingEditor.cs",
+              "RelativeDocumentMoniker": "Library\\PackageCache\\com.unity.purchasing@4.11.0\\Editor\\UnityPurchasingEditor.cs",
+              "ToolTip": "D:\\unity_file\\BallMove\\Library\\PackageCache\\com.unity.purchasing@4.11.0\\Editor\\UnityPurchasingEditor.cs",
+              "RelativeToolTip": "Library\\PackageCache\\com.unity.purchasing@4.11.0\\Editor\\UnityPurchasingEditor.cs",
+              "ViewState": "AgIAAEoAAAAAAAAAAAAgwGkAAABVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-09T06:39:33.229Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "StartGame.cs",
+              "DocumentMoniker": "D:\\unity_file\\BallMove\\Assets\\Script\\StartGame.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\StartGame.cs",
+              "ToolTip": "D:\\unity_file\\BallMove\\Assets\\Script\\StartGame.cs",
+              "RelativeToolTip": "Assets\\Script\\StartGame.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-26T07:18:37.841Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "GameControl.cs",
+              "DocumentMoniker": "D:\\unity_file\\BallMove\\Assets\\Script\\GameControl.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\GameControl.cs",
+              "ToolTip": "D:\\unity_file\\BallMove\\Assets\\Script\\GameControl.cs",
+              "RelativeToolTip": "Assets\\Script\\GameControl.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAGIAAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-26T02:13:11.638Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+repository "BallMove@tj_wechat_os_qy0wqpivklzdknzhpxhh8r3ju@cloud.cn"
+  path "/"
+    br "/main"
+    co "/main"

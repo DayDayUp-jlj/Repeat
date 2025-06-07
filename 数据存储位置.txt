@@ -1,0 +1,2 @@
+Win：C:\Users\<用户名>\AppData\LocalLow\DefaultCompany\BallMove\ExperimentResults.csv
+Mac：/Users/<用户名>/Library/Application Support/DefaultCompany/BallMove/ExperimentResults.csv
