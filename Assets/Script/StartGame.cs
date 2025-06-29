@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class StartGame : MonoBehaviour
 {
     private Button startGameBtn;
+    public string senceName;
     // Start is called before the first frame update
     void Start()
     {
@@ -16,6 +17,6 @@ public class StartGame : MonoBehaviour
 
     void ChangeStartSence()
     {
-        SceneManager.LoadScene("GameSence");
+        SceneManager.LoadScene(senceName);
     }
 }

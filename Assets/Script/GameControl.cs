@@ -9,17 +9,18 @@ using System.Linq;
 public class GameControl : MonoBehaviour
 {
     [Header("Moving Settings")]
-    public Transform[] anglesGroup = new Transform[9];
+    public Transform[] anglesGroup = new Transform[5];
     public Transform startPos;
     public Transform endPos;
-    public float directSpeed; //x轴速度
-    public float successfulTarge = 4f;  //距离终点墙距离显示成功
-    public int[] speedGroup = new int[3] { 5, 6, 7 };
-    private Vector3 currentAngle;
+    private float xSpeed; //x轴速度
+    public int[] speedGroup; //x轴的三个速度
+    private float currentXAngle;
+    private float currentYAngle;
+    private float currentZAngle; //三个方向夹角
     private int countGame = 1;
-    private float currentSpeed;
     private bool isBallMoving = true;  //小球是否移动
     private bool isTriggerEnd = false; //小球是否触碰到重点墙
+    private Vector3 currentSpeedVector;
 
     [Header("Visual Settings")]
     public Material visualMat;
@@ -28,6 +29,8 @@ public class GameControl : MonoBehaviour
 
     [Header("RunShowing Settings")]
     public float invisualForwardTime = 1f; //变成不可见材质前的时间
+    public float invisualForwardDistance = 10f; //变成不可见材质前的时间
+    public bool timeOrDistance;
     public float resultDisplayTime = 3f; // 结果显示时间
 
     [Header("DataShowing Setting")]
@@ -39,19 +42,19 @@ public class GameControl : MonoBehaviour
     private bool isDelayingStop = false;  //触碰到墙后的延迟
 
     [Header("Data Logging")]
-    private string dataFileName = "ExperimentResults.csv"; //excel文件名
+    public string dataFileName; //excel文件名
     private string dataFilePath;
 
     [Header("RestTime Logging")]
-    public float restTime = 3f; //休息时间（分钟）
+    public float restTime = 30f; //休息时间（秒）
     public GameObject startBtnBrand;
     public Text restContent;
     public Button startBtn;
     private bool waitingForRest = false;  //等待休息按钮点击
 
-    private List<(Vector3 angle, int speed)> ExperimentCombinations = new List<(Vector3, int)>(); //存储27组数据的列表
+    private List<(Vector3 SpeedVector, int speed)> ExperimentCombinations = new List<(Vector3, int)>(); //存储15组数据的列表 currentSpeedVector为当前的方向向量 speed为x轴的速度
     private int currentCombinationIndex = 0;
-    private int[] currentRepetition = new int[27];
+    private int[] currentRepetition = new int[15];
 
     private void Start()
     {
@@ -61,20 +64,21 @@ public class GameControl : MonoBehaviour
         dataFilePath = Path.Combine(Application.persistentDataPath, dataFileName);
         if (!File.Exists(dataFilePath))
         {
-            File.AppendAllText(dataFilePath, "trail, angle_x, angle_y, angle_z, speed, distance\n");
+            File.AppendAllText(dataFilePath, "trail, angle_x(deg), angle_y(deg), angle_z(deg), speed(m/s), distance(m)\n");
         }
 
         //将实验进行分组
         foreach (Transform angleTransform in anglesGroup)
         {
-            Vector3 angle = (angleTransform.position - startPos.position).normalized;
+            Vector3 SpeedVector = (angleTransform.position - startPos.position).normalized;
+
             foreach (int speed in speedGroup)
             {
-                ExperimentCombinations.Add((angle, speed));
+                ExperimentCombinations.Add((SpeedVector, speed));
             }
         }
 
-        for(int i = 0; i < ExperimentCombinations.Count; i++)
+        for (int i = 0; i < ExperimentCombinations.Count; i++)
         {
             currentRepetition[i] = 10;
         }
@@ -96,7 +100,7 @@ public class GameControl : MonoBehaviour
     IEnumerator RunningSequence()
     {
         File.AppendAllText(dataFilePath, "practiceData\n");
-        //yield return StartCoroutine(TryTrial());
+        yield return StartCoroutine(TryTrial());
 
         //小球位置重置
         transform.position = startPos.position;
@@ -107,7 +111,7 @@ public class GameControl : MonoBehaviour
 
         restContent.text = "练习结束";
         countGame = 1;
-        currentCombinationIndex = Random.Range(0, 27);
+        currentCombinationIndex = Random.Range(0, 15);
         startBtnBrand.SetActive(true);
         waitingForRest = true;
         yield return new WaitUntil(() => !waitingForRest);
@@ -123,11 +127,17 @@ public class GameControl : MonoBehaviour
     /// <returns></returns>
     IEnumerator TryTrial()
     {
-        while(countGame <= 27)
+        while (countGame <= 15)
         {
             var currentCombination = ExperimentCombinations[currentCombinationIndex];
-            currentSpeed = currentCombination.speed;
-            currentAngle = currentCombination.angle;
+            xSpeed = currentCombination.speed;
+            currentSpeedVector = currentCombination.SpeedVector;
+            Vector3 xVector = new Vector3(1, 0, 0);
+            Vector3 yVector = new Vector3(0, 1, 0);
+            Vector3 zVector = new Vector3(0, 0, 1);
+            currentXAngle = Mathf.Acos(Vector3.Dot(currentSpeedVector, xVector)) * Mathf.Rad2Deg;
+            currentYAngle = Mathf.Acos(Vector3.Dot(currentSpeedVector, yVector)) * Mathf.Rad2Deg;
+            currentZAngle = Mathf.Acos(Vector3.Dot(currentSpeedVector, zVector)) * Mathf.Rad2Deg;
 
             //小球位置重置
             transform.position = startPos.position;
@@ -154,22 +164,18 @@ public class GameControl : MonoBehaviour
 
             // 显示结果
             resultBrand.SetActive(true);
-            float distanceToWall = endPos.transform.position.x - transform.position.x - 3f;
+            float distanceToWall = Mathf.Round(endPos.transform.position.x - transform.position.x - 3f);
 
             if (isTriggerEnd)
             {
-                result.text = "已经触碰到墙了";
-            }
-            else if (distanceToWall <= successfulTarge)
-            {
-                result.text = "本次实验很成功";
+                result.text = "已经触碰到墙了，距离终点：" + distanceToWall;
             }
             else
             {
-                result.text = $"距离终点：{distanceToWall:F2}";
+                result.text = $"距离终点：{distanceToWall}";
             }
 
-            SaveDataToFile(countGame, currentAngle, currentSpeed, distanceToWall);
+            SaveDataToFile(countGame, currentXAngle, currentYAngle, currentZAngle, xSpeed, distanceToWall);
 
             // 实验延迟3秒后继续
             yield return new WaitForSecondsRealtime(resultDisplayTime);
@@ -185,11 +191,17 @@ public class GameControl : MonoBehaviour
     /// </summary>
     IEnumerator GameLogic()
     {
-        while (countGame <= 270)
+        while (countGame <= 150)
         {
             var currentCombination = ExperimentCombinations[currentCombinationIndex];
-            currentSpeed = currentCombination.speed;
-            currentAngle = currentCombination.angle;
+            xSpeed = currentCombination.speed;
+            currentSpeedVector = currentCombination.SpeedVector;
+            Vector3 xVector = new Vector3(1, 0, 0);
+            Vector3 yVector = new Vector3(0, 1, 0);
+            Vector3 zVector = new Vector3(0, 0, 1);
+            currentXAngle = Mathf.Acos(Vector3.Dot(currentSpeedVector, xVector)) * Mathf.Rad2Deg;
+            currentYAngle = Mathf.Acos(Vector3.Dot(currentSpeedVector, yVector)) * Mathf.Rad2Deg;
+            currentZAngle = Mathf.Acos(Vector3.Dot(currentSpeedVector, zVector)) * Mathf.Rad2Deg;
 
             //小球位置重置
             transform.position = startPos.position;
@@ -216,28 +228,24 @@ public class GameControl : MonoBehaviour
 
             // 显示结果
             resultBrand.SetActive(true);
-            float distanceToWall = endPos.transform.position.x - transform.position.x - 3f;
+            float distanceToWall = Mathf.Round(endPos.transform.position.x - transform.position.x - 3f);
 
             if (isTriggerEnd)
             {
-                result.text = "已经触碰到墙了";
-            }
-            else if (distanceToWall <= successfulTarge)
-            {
-                result.text = "本次实验很成功";
+                result.text = "已经触碰到墙了，距离终点：" + distanceToWall;
             }
             else
             {
-                result.text = $"距离终点：{distanceToWall:F2}";
+                result.text = $"距离终点：{distanceToWall}";
             }
 
-            SaveDataToFile(countGame, currentAngle, currentSpeed, distanceToWall);
+            SaveDataToFile(countGame, currentXAngle, currentYAngle, currentZAngle, xSpeed, distanceToWall);
 
             // 实验延迟3秒后继续
             yield return new WaitForSecondsRealtime(resultDisplayTime);
 
             // 每54次实验后显示休息按钮
-            if (countGame % 54 == 0)
+            if (countGame % 30 == 0)
             {
                 StartCoroutine(CountdownTime());
                 yield return new WaitUntil(() => !waitingForRest);  //点击按钮开始
@@ -252,32 +260,32 @@ public class GameControl : MonoBehaviour
 
             do
             {
-                currentCombinationIndex = Random.Range(0, 27);
+                currentCombinationIndex = Random.Range(0, 15);
             }
             while (currentRepetition[currentCombinationIndex] == 0);
 
-            if(currentRepetition.All(rep => rep == 0))
+            if (currentRepetition.All(rep => rep == 0))
             {
                 break;
             }
         }
-        //完成270次试验后返回首页
+        //完成150次试验后返回首页
         SceneManager.LoadScene("Index");
     }
 
     /// <summary>
     /// 写入每次实验结果的函数
     /// </summary>
-    private void SaveDataToFile(int trial, Vector3 angle, float speed, float distance)
+    private void SaveDataToFile(int trial, float xAngle, float yAngle, float zAngle, float xSpeed, float distance)
     {
         try
         {
             using (StreamWriter writer = new StreamWriter(dataFilePath, true))
             {
-                writer.WriteLine($"{trial}, {angle.x}, {angle.y}, {angle.z}, {speed}, {distance}");
+                writer.WriteLine($"{trial}, {xAngle}, {yAngle}, {zAngle}, {xSpeed}, {distance}");
             }
         }
-        catch(IOException e)
+        catch (IOException e)
         {
             Debug.LogError($"写入文件失败: {e.Message}");
         }
@@ -290,21 +298,25 @@ public class GameControl : MonoBehaviour
     {
         isBallMoving = true;
         ballRenderer.material = visualMat;
-
-        float visualEndTime = Time.time + invisualForwardTime;
-        while (Time.time < visualEndTime && isBallMoving)
+        float visualEndTime;
+        if (timeOrDistance)
         {
-            float remainingSpeed = Mathf.Sqrt(currentSpeed * currentSpeed - directSpeed * directSpeed);
-            Vector3 velocity = new Vector3(directSpeed, currentAngle.y * remainingSpeed, currentAngle.z * remainingSpeed);
-            transform.Translate(velocity * Time.deltaTime);
-            yield return null;
+            visualEndTime = Time.time + invisualForwardTime;
         }
-        ballRenderer.material = invisualMat;
+        else
+        {
+            visualEndTime = invisualForwardDistance / xSpeed + Time.time;
+        }
+        // 计算实际速度（确保X轴分速度 = xSpeed）
+        float speed = xSpeed / currentSpeedVector.x;
+        Vector3 velocity = currentSpeedVector * speed;
         while (isBallMoving)
         {
-            float remainingSpeed = Mathf.Sqrt(currentSpeed * currentSpeed - directSpeed * directSpeed);
-            Vector3 velocity = new Vector3(directSpeed, currentAngle.y * remainingSpeed, currentAngle.z * remainingSpeed);
             transform.Translate(velocity * Time.deltaTime);
+            if (visualEndTime <= Time.time)
+            {
+                ballRenderer.material = invisualMat;
+            }
             yield return null;
         }
     }
@@ -351,9 +363,13 @@ public class GameControl : MonoBehaviour
         waitingForRest = false;
     }
 
+    /// <summary>
+    /// 倒计时
+    /// </summary>
+    /// <returns></returns>
     IEnumerator CountdownTime()
     {
-        float currentTime = restTime * 60;
+        float currentTime = restTime;
         waitingForRest = true;
         startBtnBrand.SetActive(true);
         while (currentTime >= 0 && waitingForRest)
@@ -387,6 +403,6 @@ public class GameControl : MonoBehaviour
         GUIStyle countText = new GUIStyle(GUI.skin.label);
         countText.fontSize = 24;
         countText.normal.textColor = Color.white;
-        GUI.Label(new Rect(Screen.width / 2 - 50, 20, 150, 80), "第" + countGame+ "次实验", countText);
+        GUI.Label(new Rect(Screen.width / 2 - 50, 20, 150, 80), "第" + countGame + "次实验", countText);
     }
 }

@@ -9,6 +9,12 @@ EditorBuildSettings:
     path: Assets/Scenes/Index.unity
     guid: e3c5c54df695d26489d280591692d660
   - enabled: 1
-    path: Assets/Scenes/GameSence.unity
+    path: Assets/Scenes/selectSence.unity
+    guid: 184f9bd87b2e21a47b3b70db68fec0f2
+  - enabled: 1
+    path: Assets/Scenes/GameSenceTime.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/Scenes/GameSenceDistance.unity
+    guid: 5385df196dc419748af8e4705e8a3dd3
   m_configObjects: {}
